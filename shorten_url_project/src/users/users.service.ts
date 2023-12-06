@@ -155,6 +155,31 @@ export class UserService {
     }
   }
 
+  //로또 번호 조회 및 생성
+  async getUserLuckyLottoNumber(id: number): Promise<number[]> {
+    try {
+      const user = await this.findById(id);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      // 생성된 로또 번호를 저장하지 않고 반환
+      return this.generateLottoNumbers().sort((a, b) => a - b);
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+  private generateLottoNumbers(): number[] {
+    const lottoNumbers: number[] = [];
+    while (lottoNumbers.length < 6) {
+      const randomNumber = Math.floor(Math.random() * 45) + 1;
+      if (!lottoNumbers.includes(randomNumber)) {
+        lottoNumbers.push(randomNumber);
+      }
+    }
+    return lottoNumbers;
+  }
+
   async findById(id: number) {
     return await this.userRepository.findOne({
       where: { id },

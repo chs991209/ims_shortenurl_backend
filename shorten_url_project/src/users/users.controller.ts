@@ -150,4 +150,30 @@ export class UserController {
       throw new ConflictException(error.message);
     }
   }
+
+  @Get('/user/lotto/:id')
+  @UseGuards(Guard)
+  @ApiOperation({
+    summary: '로또 번호 조회',
+    description: '유저의 로또 번호를 조회합니다.',
+  })
+  @ApiParam({ name: 'id', description: '유저 ID' })
+  @ApiResponse({
+    status: 200,
+    description: '로또 번호 조회 성공',
+    type: [Number],
+  })
+  @ApiResponse({ status: 404, description: '유저가 없음' })
+  async getUserLuckyLottoNumber(@Param('id') id: number) {
+    try {
+      const lottoNumbers = await this.userService.getUserLuckyLottoNumber(id);
+      return {
+        message: 'User lucky lotto number',
+        lottoNumbers: lottoNumbers,
+      };
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
 }
