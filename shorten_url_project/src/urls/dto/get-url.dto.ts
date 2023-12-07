@@ -1,24 +1,17 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsUrl,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsUrl } from 'class-validator';
 
 export class GetUrlDto {
   @IsNotEmpty()
   @IsUrl()
   readonly original_url: string;
+  @IsNotEmpty()
   @IsString()
   readonly shortened_url: string;
   @IsNotEmpty()
   @IsString()
   readonly created_at: string;
-  @IsOptional()
-  @IsString()
-  readonly updated_at: string;
 
+  @IsNotEmpty()
   @IsNumber()
   readonly id: number;
 }

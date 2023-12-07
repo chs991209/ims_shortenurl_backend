@@ -13,6 +13,6 @@ import { AuthMiddleware } from '../auth/auth.middleware';
 })
 export class UrlsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('urls*');
+    consumer.apply(AuthMiddleware).forRoutes('url*');
   }
 }

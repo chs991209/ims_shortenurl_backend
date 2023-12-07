@@ -15,7 +15,7 @@ import { Response } from 'express';
 import { HttpCode } from '@nestjs/common';
 import { CreateQrCodeDto } from './dto/create-qrcode';
 
-@Controller('urls')
+@Controller('url')
 @UseGuards(AuthMiddleware)
 export class UrlsController {
   constructor(private readonly urlsService: UrlsService) {}
@@ -40,16 +40,15 @@ export class UrlsController {
           message: 'POST_SUCCESS',
           url: await this.urlsService.createGuest(createUrlDto),
         });
-      } else {
-        const userId: number = req['userId'];
-        /**
-         * 로그인한 사용자는 생성된 data가 db에 저장된 후 생성된 db data로 구성된 object를 응답으로 받습니다.
-         */
-        return res.json({
-          message: 'POST_SUCCESS',
-          url: await this.urlsService.create(createUrlDto, userId),
-        });
       }
+      const userId: number = req['userId'];
+      /**
+       * 로그인한 사용자는 생성된 data가 db에 저장된 후 생성된 db data로 구성된 object를 응답으로 받습니다.
+       */
+      return res.json({
+        message: 'POST_SUCCESS',
+        url: await this.urlsService.create(createUrlDto, userId),
+      });
     } catch (err) {
       console.error(err);
       return res
@@ -72,14 +71,13 @@ export class UrlsController {
           message: 'POST_SUCCESS',
           qr_code: qrCodeData,
         });
-      } else {
-        const user_id: number = req['userId'];
-        const foundQrCode: object = await this.urlsService.findOneQrCode(
-          createQrCodeDto,
-          user_id,
-        );
-        return res.json({ message: 'POST_SUCCESS', qr_code: foundQrCode });
       }
+      const user_id: number = req['userId'];
+      const foundQrCode: object = await this.urlsService.findOneQrCode(
+        createQrCodeDto,
+        user_id,
+      );
+      return res.json({ message: 'POST_SUCCESS', qr_code: foundQrCode });
     } catch (err) {
       console.error(err);
       return res
@@ -99,13 +97,12 @@ export class UrlsController {
       if (!req['isGuest']) {
         const urls = await this.urlsService.findAllUrls(getUrlDto, user_id);
         return res.json({ message: 'GET_SUCCESS', urls: urls });
-      } else {
-        /**
-         * Guest의 browser가 main page url로 redirect하도록 응답합니다.
-         * url example => 'https://ipaddress:port/'
-         */
-        return res.redirect(302, 'http://localhost:3000/');
       }
+      /**
+       * Guest의 browser가 main page url로 redirect하도록 응답합니다.
+       * url example => 'https://ipaddress:port/'
+       */
+      return res.redirect(302, 'http://localhost:3000/');
     } catch (err) {
       console.error(err);
       return res
@@ -113,14 +110,4 @@ export class UrlsController {
         .json({ message: err.message || 'Internal Server Error' });
     }
   }
-
-  // @Put(':id')
-  // update(@Param('id') id: string, @Body() updateUrlDto: UpdateUrlDto) {
-  //   return this.urlsService.update(+id, updateUrlDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.urlsService.remove(+id);
-  // }
 }

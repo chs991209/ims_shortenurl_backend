@@ -86,22 +86,19 @@ export class UrlsService {
         'original_url',
         'shortened_url',
         'created_at',
-        'updated_at',
         'deleted_at',
       ],
       where: { user_id: user_id, ...filterOptions },
     });
     /**
-     * updated_at이 null일 떄 updated_at key 자체를 forEach에서 생성하지 않고 res에 담아서 보냅니다.
+     * deleted_at이 null일 떄 deleted_at key 자체를 forEach에서 생성하지 않고 res에 담아서 보냅니다.
      */
     const filteredUrls = urls.map((url) => {
       const filteredUrl: Record<string, object> = {};
       Object.keys(url).forEach((key) => {
         if (url[key] !== null && url[key] !== undefined) {
           filteredUrl[key] =
-            key === 'created_at' || key === 'updated_at'
-              ? this.formatToKoreanTime(url[key])
-              : url[key];
+            key === 'deleted_at' ? this.formatToKoreanTime(url[key]) : url[key];
         }
       });
       return filteredUrl;
@@ -180,6 +177,11 @@ export class UrlsService {
 
     return formattedTimestamp;
   }
+
+  /**
+   * Date 타입의 timestamp를 한국 시간 형식으로 바꿔 줍니다.
+   * example => '2023. 12. 07. 오전 10:07:07'
+   */
   private formatToKoreanTime(timestamp: Date): string {
     const koreanOptions = {
       timeZone: 'Asia/Seoul',

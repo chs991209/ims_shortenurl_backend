@@ -12,10 +12,10 @@ export class User {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @Column({ type: 'varchar', unique: true, nullable: false })
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
   email: string;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
   nickname: string;
 
   @Column({ type: 'varchar', nullable: false })
@@ -24,7 +24,7 @@ export class User {
   @CreateDateColumn({ name: 'created_at', nullable: false })
   created_at: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  @UpdateDateColumn({ type: 'timestamp', nullable: true })
   updated_at: Date;
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
