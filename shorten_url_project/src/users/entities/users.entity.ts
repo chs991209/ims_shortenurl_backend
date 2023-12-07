@@ -12,10 +12,10 @@ export class User {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @Column({ type: 'varchar', length: 50, unique: true })
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
   email: string;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
   nickname: string;
 
   @Column({ type: 'varchar', length: 500, nullable: false })
