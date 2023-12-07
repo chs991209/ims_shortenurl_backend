@@ -32,11 +32,11 @@ describe('UserService', () => {
     jwtService = module.get<JwtService>(JwtService);
   });
 
-  it('should be defined', () => {
+  it('정의되어야 함', () => {
     expect(userService).toBeDefined();
   });
 
-  describe('User Actions', () => {
+  describe('사용자 액션', () => {
     const mockUser: User = {
       id: 1,
       email: 'test@example.com',
@@ -47,7 +47,7 @@ describe('UserService', () => {
       deleted_at: null,
     };
 
-    it('should create a new user', async () => {
+    it('새로운 사용자를 생성해야 함', async () => {
       jest.spyOn(userRepository, 'save').mockResolvedValueOnce(mockUser);
 
       const result = await userService.create({
@@ -59,7 +59,7 @@ describe('UserService', () => {
       expect(result).toEqual(expect.objectContaining({ nickname: 'testuser' }));
     });
 
-    it('should return an access token on successful login', async () => {
+    it('성공적인 로그인 시 액세스 토큰을 반환해야 함', async () => {
       jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(mockUser);
       jest.spyOn(jwtService, 'sign').mockReturnValueOnce('mockedAccessToken');
 
@@ -71,7 +71,7 @@ describe('UserService', () => {
       expect(result).toEqual('mockedAccessToken');
     });
 
-    it('should return user information on successful retrieval', async () => {
+    it('성공적인 검색 시 사용자 정보를 반환해야 함', async () => {
       jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(mockUser);
 
       const result = await userService.getUserInfo(1);
@@ -81,7 +81,7 @@ describe('UserService', () => {
       );
     });
 
-    it('should update user information on successful update', async () => {
+    it('성공적인 업데이트 시 사용자 정보를 업데이트해야 함', async () => {
       jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(mockUser);
       jest.spyOn(userRepository, 'save').mockResolvedValueOnce({
         ...mockUser,
@@ -102,7 +102,7 @@ describe('UserService', () => {
       );
     });
 
-    it('should delete user information on successful deletion', async () => {
+    it('성공적인 삭제 시 사용자 정보를 삭제해야 함', async () => {
       jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(mockUser);
       jest.spyOn(userRepository, 'save').mockResolvedValueOnce({
         ...mockUser,

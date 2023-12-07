@@ -57,7 +57,6 @@ export class UserService {
       }
 
       // 기타 예외 처리
-      console.error(error);
       throw new InternalServerErrorException({
         message: 'Error creating user',
       });
@@ -85,7 +84,6 @@ export class UserService {
       });
       return accessToken;
     } catch (error) {
-      console.error(error);
       throw new UnauthorizedException(error.message);
     }
   }
@@ -98,7 +96,6 @@ export class UserService {
       }
       return user;
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }
@@ -136,7 +133,6 @@ export class UserService {
       // 업데이트된 사용자를 저장합니다.
       return await this.userRepository.save(user);
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }
@@ -150,7 +146,6 @@ export class UserService {
       user.deleted_at = new Date();
       await this.userRepository.save(user);
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }
@@ -165,7 +160,6 @@ export class UserService {
       // 생성된 로또 번호를 저장하지 않고 반환
       return this.generateLottoNumbers().sort((a, b) => a - b);
     } catch (error) {
-      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }

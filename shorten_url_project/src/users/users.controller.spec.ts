@@ -25,16 +25,16 @@ describe('UserController', () => {
     userService = module.get<UserService>(UserService);
   });
 
-  it('should be defined', () => {
+  it('정의되어야 함', () => {
     expect(userController).toBeDefined();
   });
 
   describe('create', () => {
-    it('should create a user', async () => {
+    it('유저를 생성해야 함', async () => {
       const signupDTO: AuthSignupDTO = {
         email: 'test@example.com',
         nickname: 'testuser',
-        password: 'password123',
+        password: 'passwOrd!123',
       };
 
       jest.spyOn(userService, 'create').mockResolvedValueOnce({
@@ -50,12 +50,12 @@ describe('UserController', () => {
       const result = await userController.create(signupDTO);
 
       expect(result).toEqual({
-        message: 'Signup success!',
+        message: '가입 성공!',
         userInfo: signupDTO,
       });
     });
 
-    it('should throw ConflictException if userService.create throws ConflictException', async () => {
+    it('userService.create에서 ConflictException이 발생하면 ConflictException을 던져야 함', async () => {
       const signupDTO: AuthSignupDTO = {
         email: 'existing@example.com',
         nickname: 'existinguser',
@@ -73,10 +73,10 @@ describe('UserController', () => {
   });
 
   describe('login', () => {
-    it('should return access token on successful login', async () => {
+    it('성공적인 로그인 시 액세스 토큰을 반환해야 함', async () => {
       const loginDTO: AuthLoginDTO = {
         email: 'test@example.com',
-        password: 'password123',
+        password: 'passwOrd!123',
       };
 
       jest
@@ -86,12 +86,12 @@ describe('UserController', () => {
       const result = await userController.login(loginDTO);
 
       expect(result).toEqual({
-        message: 'Login success!',
+        message: '로그인 성공!',
         accessToken: 'mockedAccessToken',
       });
     });
 
-    it('should throw UnauthorizedException if login fails', async () => {
+    it('로그인 실패 시 UnauthorizedException을 던져야 함', async () => {
       const loginDTO: AuthLoginDTO = {
         email: 'nonexistent@example.com',
         password: 'wrongpassword',
@@ -108,7 +108,7 @@ describe('UserController', () => {
   });
 
   describe('getUserInfo', () => {
-    it('should return user information on successful retrieval', async () => {
+    it('정상적인 검색 시 사용자 정보를 반환해야 함', async () => {
       const userId = 1;
 
       jest.spyOn(userService, 'getUserInfo').mockResolvedValueOnce({
@@ -124,7 +124,7 @@ describe('UserController', () => {
       const result = await userController.getUserInfo(userId);
 
       expect(result).toEqual({
-        message: 'User information',
+        message: '사용자 정보',
         getToUser: {
           id: userId,
           email: 'test@example.com',
@@ -133,7 +133,7 @@ describe('UserController', () => {
       });
     });
 
-    it('should throw UnauthorizedException if retrieval fails', async () => {
+    it('검색 실패 시 UnauthorizedException을 던져야 함', async () => {
       const userId = 999;
 
       jest
@@ -147,7 +147,7 @@ describe('UserController', () => {
   });
 
   describe('updateUserInfo', () => {
-    it('should update user information on successful update', async () => {
+    it('정상적인 업데이트 시 사용자 정보를 업데이트해야 함', async () => {
       const userId = 1;
       const updateDTO: AuthUpdateDTO = {
         nickname: 'updateduser',
@@ -167,7 +167,7 @@ describe('UserController', () => {
       const result = await userController.updateUserInfo(userId, updateDTO);
 
       expect(result).toEqual({
-        message: 'User information updated successfully',
+        message: '사용자 정보가 성공적으로 업데이트되었습니다',
         user: {
           id: userId,
           email: 'test@example.com',
@@ -176,7 +176,7 @@ describe('UserController', () => {
       });
     });
 
-    it('should throw UnauthorizedException if update fails', async () => {
+    it('업데이트 실패 시 UnauthorizedException을 던져야 함', async () => {
       const userId = 999;
       const updateDTO: AuthUpdateDTO = {
         nickname: 'updateduser',
@@ -194,7 +194,7 @@ describe('UserController', () => {
   });
 
   describe('deleteUserInfo', () => {
-    it('should delete user information on successful deletion', async () => {
+    it('정상적인 삭제 시 사용자 정보를 삭제해야 함', async () => {
       const userId = 1;
 
       jest
@@ -204,7 +204,7 @@ describe('UserController', () => {
       const result = await userController.deleteUserInfo(userId);
 
       expect(result).toEqual({
-        message: 'User information deleted successfully',
+        message: '사용자 정보가 성공적으로 삭제되었습니다',
         deleteToUser: {
           id: userId,
           email: 'test@example.com',
@@ -213,7 +213,7 @@ describe('UserController', () => {
       });
     });
 
-    it('should throw UnauthorizedException if deletion fails', async () => {
+    it('삭제 실패 시 UnauthorizedException을 던져야 함', async () => {
       const userId = 999;
 
       jest
