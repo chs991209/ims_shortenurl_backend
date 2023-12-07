@@ -25,7 +25,7 @@ import {
 import { Guard } from 'src/middleware/guard';
 
 @ApiTags('user api')
-@Controller('')
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -67,7 +67,7 @@ export class UserController {
     }
   }
 
-  @Get('/user/:id')
+  @Get('/:id')
   @UseGuards(Guard)
   @ApiOperation({
     summary: '유저 정보 조회',
@@ -95,7 +95,7 @@ export class UserController {
     }
   }
 
-  @Put('/user/update/:id')
+  @Put('/update/:id')
   @UseGuards(Guard)
   @ApiOperation({
     summary: '유저 정보 업데이트',
@@ -127,7 +127,7 @@ export class UserController {
     }
   }
 
-  @Put('/user/delete/:id')
+  @Put('/delete/:id')
   @UseGuards(Guard)
   @ApiOperation({
     summary: '유저 정보 삭제',
@@ -151,7 +151,7 @@ export class UserController {
     }
   }
 
-  @Get('/user/lotto/:id')
+  @Get('/lotto/:id')
   @UseGuards(Guard)
   @ApiOperation({
     summary: '로또 번호 조회',
