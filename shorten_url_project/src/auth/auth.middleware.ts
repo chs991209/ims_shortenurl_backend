@@ -10,7 +10,7 @@ export class AuthMiddleware implements NestMiddleware {
     /**
      * 같은 ip 에서 24시간 동안 10번만
      */
-    points: 10,
+    points: 1200,
     duration: 86400,
   });
   async use(req: Request, res: Response, next: NextFunction) {
@@ -53,11 +53,14 @@ export class AuthMiddleware implements NestMiddleware {
   ): Promise<void> {
     try {
       const key: string = req.ip;
-      await this.rateLimiter.consume(key);
+      const sumOfConsumption = await this.rateLimiter.consume(key);
+      req['remainingPoints'] = sumOfConsumption.remainingPoints;
+      console.log(req['remainingPoints']);
       next();
     } catch (err) {
       res.status(429).json({
         error: 'Rate limit exceeded',
+        message: 'Too many traffics',
         details:
           'Too many requests from your IP. 10 times per 24 hours is the limit. Please sign in to use our service without restrict',
       });

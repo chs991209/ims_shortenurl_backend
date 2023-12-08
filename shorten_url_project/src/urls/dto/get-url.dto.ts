@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString, IsUrl } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class GetUrlDto {
   @IsNotEmpty()
@@ -8,8 +14,9 @@ export class GetUrlDto {
   @IsString()
   readonly shortened_url: string;
   @IsNotEmpty()
-  @IsString()
   readonly created_at: string;
+  @IsOptional()
+  readonly deleted_at: string;
 
   @IsNotEmpty()
   @IsNumber()
