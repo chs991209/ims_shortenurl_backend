@@ -37,7 +37,7 @@ export class UrlsService {
      * 사용자는 shortened_url을 먼저 제공받습니다. qr_code는 QrCode 생성 요청 시에만 응답에 포함해 보냅니다.
      */
     const savedData: Url[] = await this.urlsRepository.find({
-      select: ['id', 'original_url', 'shortened_url', 'created_at'],
+      select: ['id', 'original_url', 'shortened_url', 'qr_code', 'created_at'],
       where: { id: url.id },
     });
     const formattedQrCode = savedData.map((urlData) => ({
@@ -52,13 +52,15 @@ export class UrlsService {
      * response body로 보낼 url은 단수의 데이터입니다.
      */
     const shortened_url: string = this.generateGuestShortenedUrl();
+    const qr_code: string = await this.generateQrCode(shortened_url);
     /**
-     * 사용자는 shortened_url을 먼저 제공받습니다. qr_code는 QrCode 생성 요청 시에만 응답에 포함해 보냅니다.
+     * 사용자는 shortened_url을 qr_code와 함께 제공받습니다.
      */
     const koreanTimestamp = await this.getCurrentKoreanTimestamp();
 
     const response: object = {
       shortened_url: shortened_url,
+      qr_code: qr_code,
       created_at: koreanTimestamp,
       ...createUrlDto,
     };
@@ -68,15 +70,11 @@ export class UrlsService {
   /**
    * null 인 key를 제거해서 보냅니다.
    */
-  // null key 제거 버전
-  async findAllUrls(
-    getUrlDto: GetUrlDto,
-    user_id: number,
-  ): Promise<Record<string, object>[]> {
+  async findAllUrls(user_id: number): Promise<Record<string, object>[]> {
     const filterOptions: Record<string, object> = {};
-    Object.keys(getUrlDto).forEach((key) => {
-      if (getUrlDto[key] !== null && getUrlDto[key] !== undefined) {
-        filterOptions[key] = getUrlDto[key];
+    Object.keys(GetUrlDto).forEach((key) => {
+      if (GetUrlDto[key] !== null && GetUrlDto[key] !== undefined) {
+        filterOptions[key] = GetUrlDto[key];
       }
     });
 
@@ -88,7 +86,7 @@ export class UrlsService {
         'created_at',
         'deleted_at',
       ],
-      where: { user_id: user_id, ...filterOptions },
+      where: { user_id: user_id, ...GetUrlDto, ...filterOptions },
     });
     /**
      * deleted_at이 null일 떄 deleted_at key 자체를 forEach에서 생성하지 않고 res에 담아서 보냅니다.
