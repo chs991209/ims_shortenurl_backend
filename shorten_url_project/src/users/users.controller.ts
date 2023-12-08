@@ -58,7 +58,12 @@ export class UserController {
   async login(@Body() loginDTO: AuthLoginDTO) {
     try {
       const accessToken = await this.userService.login(loginDTO);
-      return { message: 'Login success!', accessToken: accessToken };
+      return {
+        message: 'Login success!',
+        accessToken: accessToken['accessToken'],
+        email: accessToken['email'],
+        nickname: accessToken['nickname'],
+      };
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
