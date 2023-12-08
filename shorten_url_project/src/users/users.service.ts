@@ -64,7 +64,7 @@ export class UserService {
   }
 
   // 로그인
-  async login(loginDTO: AuthLoginDTO) {
+  async login(loginDTO: AuthLoginDTO): Promise<object> {
     try {
       const user = await this.findByEmail(loginDTO.email);
       if (!user || !(await bcrypt.compare(loginDTO.password, user.password))) {
@@ -82,7 +82,11 @@ export class UserService {
         secret: process.env.SECRET_KEY,
         expiresIn: '1d',
       });
-      return accessToken;
+      return {
+        accessToken: accessToken,
+        email: user.email,
+        nickname: user.nickname,
+      };
     } catch (error) {
       throw new UnauthorizedException(error.message);
     }

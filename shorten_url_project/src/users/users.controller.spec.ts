@@ -79,9 +79,7 @@ describe('UserController', () => {
         password: 'passwOrd!123',
       };
 
-      jest
-        .spyOn(userService, 'login')
-        .mockResolvedValueOnce('mockedAccessToken');
+      // jest.spyOn(userService, 'login').mockResolvedValueOnce();
 
       const result = await userController.login(loginDTO);
 
