@@ -48,6 +48,7 @@ export class UrlsController {
       return res.json({
         message: 'POST_SUCCESS',
         url: await this.urlsService.create(createUrlDto, userId),
+        remainingPoints: '무제한',
       });
     } catch (err) {
       console.error(err);
