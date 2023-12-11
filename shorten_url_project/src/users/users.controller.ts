@@ -61,6 +61,7 @@ export class UserController {
       return {
         message: 'Login success!',
         accessToken: accessToken['accessToken'],
+        id: accessToken['id'],
         email: accessToken['email'],
         nickname: accessToken['nickname'],
       };
