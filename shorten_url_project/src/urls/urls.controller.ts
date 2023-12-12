@@ -32,23 +32,26 @@ export class UrlsController {
   ): Promise<object> {
     try {
       if (req['isGuest']) {
+        const userId = null;
+        const remainingPoints = req['remainingPoints'];
         /**
-         * Guest는 즉시 단일 object가 포함된 res.body를 응답으로 받습니다.
+         * Guest는 즉시 단일 object를 value를 가지고 있는 key가 포함된 res.body를 응답으로 받습니다.
          */
         return res.json({
           message: 'POST_SUCCESS',
-          url: await this.urlsService.createGuest(createUrlDto),
-          remainingPoints: req['remainingPoints'],
+          url: await this.urlsService.create(createUrlDto, userId),
+          remainingPoints: remainingPoints,
         });
       }
       const userId: number = req['userId'];
+      const remainingPoints = '무제한' as const;
       /**
        * 로그인한 사용자는 생성된 data가 db에 저장된 후 생성된 db data로 구성된 object를 응답으로 받습니다.
        */
       return res.json({
         message: 'POST_SUCCESS',
         url: await this.urlsService.create(createUrlDto, userId),
-        remainingPoints: '무제한',
+        remainingPoints: remainingPoints,
       });
     } catch (err) {
       console.error(err);
