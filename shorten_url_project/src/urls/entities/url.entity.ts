@@ -13,10 +13,10 @@ export class Url {
   @PrimaryGeneratedColumn({ type: 'integer' })
   id: number;
 
-  @Column({ type: 'integer', nullable: false })
-  user_id: number;
+  @Column({ type: 'integer', nullable: true })
+  user_id: number | null;
 
-  @Column({ type: 'varchar', nullable: false, unique: true, length: 767 })
+  @Column({ type: 'varchar', nullable: false, length: 767 })
   original_url: string;
 
   @Column({ type: 'varchar', nullable: false, unique: true, length: 255 })

@@ -19,7 +19,10 @@ export class UrlsService {
     this.qrcode = qrcode;
   }
 
-  async create(createUrlDto: CreateUrlDto, user_id: number): Promise<object> {
+  async create(
+    createUrlDto: CreateUrlDto,
+    user_id: number | null,
+  ): Promise<object> {
     /**
      * CreateUrlDto로 original_url의 data type을 검증합니다.
      * response body로 보낼 url은 단수의 데이터입니다.
@@ -44,7 +47,7 @@ export class UrlsService {
       ...urlData,
       created_at: this.formatToKoreanTime(urlData['created_at'] as Date),
     }));
-    return formattedQrCode;
+    return formattedQrCode[0];
   }
   async createGuest(createUrlDto: CreateUrlDto): Promise<object> {
     /**
