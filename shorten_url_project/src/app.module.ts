@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UrlsModule } from './urls/urls.module';
-import { UserModule } from 'src/users/users.module';
-import { AuthModule } from 'src/middleware/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { ImsWeModule } from './ims.we/ims.we.module';
 import * as process from 'process';
 
 @Module({
@@ -22,9 +20,7 @@ import * as process from 'process';
       synchronize: false,
       logging: true,
     }),
-    UserModule,
-    UrlsModule,
-    AuthModule,
+    ImsWeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
