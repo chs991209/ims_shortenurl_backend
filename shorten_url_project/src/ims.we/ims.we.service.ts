@@ -9,7 +9,7 @@ export class ImsWeService {
   @InjectRepository(Url)
   private urlsRepository: Repository<Url>;
 
-  async findOne(imsShortenedUrl: string): Promise<string> {
+  async findOriginalUrl(imsShortenedUrl: string): Promise<string> {
     const originalUrl = await this.urlsRepository.find({
       select: ['original_url'],
       where: { shortened_url: imsShortenedUrl, ...GetOriginalUrlDto },

@@ -11,11 +11,15 @@ export class ImsWeController {
   async redirect(
     @Param('shortenedUrl') shortenedUrl: string,
     @Res() res: Response,
-  ): Promise<object | number | void> {
+  ): Promise<object> {
     try {
+      /**
+       * ..:port/ims.we/randomString 에서 randomString과 ims.we/를 더하여
+       * redirect 타겟 originalUrl을 찾기 위한 shortened url을 다시 선언합니다.
+       */
       const imsShortenedUrl: string = 'ims.we/' + shortenedUrl;
       const original_url: string =
-        await this.imsWeService.findOne(imsShortenedUrl);
+        await this.imsWeService.findOriginalUrl(imsShortenedUrl);
       return { url: original_url };
     } catch (err) {
       console.error(err);
