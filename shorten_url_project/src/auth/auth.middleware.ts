@@ -10,7 +10,7 @@ export class AuthMiddleware implements NestMiddleware {
     /**
      * 같은 ip 에서 24시간 동안 10번만
      */
-    points: 1200,
+    points: 10,
     duration: 86400,
   });
   async use(req: Request, res: Response, next: NextFunction) {
