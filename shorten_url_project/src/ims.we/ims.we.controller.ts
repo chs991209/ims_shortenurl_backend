@@ -2,7 +2,7 @@ import { Controller, Get, Res, Redirect, Param } from '@nestjs/common';
 import { ImsWeService } from './ims.we.service';
 import { Response } from 'express';
 
-@Controller('ims.we')
+@Controller('')
 export class ImsWeController {
   constructor(private readonly imsWeService: ImsWeService) {}
 
@@ -14,12 +14,11 @@ export class ImsWeController {
   ): Promise<object> {
     try {
       /**
-       * ..:port/ims.we/randomString 에서 randomString과 ims.we/를 더하여
-       * redirect 타겟 originalUrl을 찾기 위한 shortened url을 다시 선언합니다.
+       * ngrockDomain/randomString 에서 randomString으로
+       * redirect 타겟 originalUrl을 찾습니다.
        */
-      const imsShortenedUrl: string = 'ims.we/' + shortenedUrl;
       const original_url: string =
-        await this.imsWeService.findOriginalUrl(imsShortenedUrl);
+        await this.imsWeService.findOriginalUrl(shortenedUrl);
       return { url: original_url };
     } catch (err) {
       console.error(err);
