@@ -28,7 +28,9 @@ export class UrlsService {
      * response body로 보낼 url은 단수의 데이터입니다.
      */
     const shortened_url: string = this.generateShortenedUrl();
-    const qr_code: string = await this.generateQrCode(shortened_url);
+    const fullShortenedUrl: string =
+      'https://relative-ray-national.ngrok-free.app/' + shortened_url;
+    const qr_code: string = await this.generateQrCode(fullShortenedUrl);
     const url: Url = this.urlsRepository.create({
       ...createUrlDto,
       shortened_url,
@@ -43,32 +45,36 @@ export class UrlsService {
       select: ['id', 'original_url', 'shortened_url', 'qr_code', 'created_at'],
       where: { id: url.id },
     });
-    const formattedQrCode = savedData.map((urlData) => ({
+
+    const createdAtFormattedUrls = savedData.map((urlData) => ({
       ...urlData,
+      shortened_url:
+        'https://relative-ray-national.ngrok-free.app/' +
+        urlData['shortened_url'],
       created_at: this.formatToKoreanTime(urlData['created_at'] as Date),
     }));
-    return formattedQrCode[0];
+    return createdAtFormattedUrls[0];
   }
-  async createGuest(createUrlDto: CreateUrlDto): Promise<object> {
-    /**
-     * CreateUrlDto로 original_url의 data type을 검증합니다.
-     * response body로 보낼 url은 단수의 데이터입니다.
-     */
-    const shortened_url: string = this.generateGuestShortenedUrl();
-    const qr_code: string = await this.generateQrCode(shortened_url);
-    /**
-     * 사용자는 shortened_url을 qr_code와 함께 제공받습니다.
-     */
-    const koreanTimestamp = await this.getCurrentKoreanTimestamp();
-
-    const response: object = {
-      shortened_url: shortened_url,
-      qr_code: qr_code,
-      created_at: koreanTimestamp,
-      ...createUrlDto,
-    };
-    return response;
-  }
+  // async createGuest(createUrlDto: CreateUrlDto): Promise<object> {
+  //   /**
+  //    * CreateUrlDto로 original_url의 data type을 검증합니다.
+  //    * response body로 보낼 url은 단수의 데이터입니다.
+  //    */
+  //   const shortened_url: string = this.generateShortenedUrl();
+  //   const qr_code: string = await this.generateQrCode(shortened_url);
+  //   /**
+  //    * 사용자는 shortened_url을 qr_code와 함께 제공받습니다.
+  //    */
+  //   const koreanTimestamp = await this.getCurrentKoreanTimestamp();
+  //
+  //   const response: object = {
+  //     shortened_url: shortened_url,
+  //     qr_code: qr_code,
+  //     created_at: koreanTimestamp,
+  //     ...createUrlDto,
+  //   };
+  //   return response;
+  // }
 
   /**
    * null 인 key를 제거해서 보냅니다.
@@ -99,9 +105,10 @@ export class UrlsService {
       Object.keys(url).forEach((key) => {
         if (url[key] !== null && url[key] !== undefined) {
           filteredUrl[key] =
-            key === 'created_at' || key === 'deleted_at'
-              ? this.formatToKoreanTime(url[key])
+            key === 'shortened_url'
+              ? 'https://relative-ray-national.ngrok-free.app/' + url[key]
               : url[key];
+          key === 'deleted_at' ? this.formatToKoreanTime(url[key]) : url[key];
         }
       });
       return filteredUrl;
@@ -135,13 +142,7 @@ export class UrlsService {
   }
 
   private generateShortenedUrl(): string {
-    const randomString: string = Math.random().toString(24).substring(4);
-    return `ims.we/${randomString}`;
-  }
-
-  private generateGuestShortenedUrl(): string {
-    const randomString: string = Math.random().toString(24).substring(4);
-    return `ims.we/guest/${randomString}`;
+    return Math.random().toString(24).substring(4);
   }
 
   /**
