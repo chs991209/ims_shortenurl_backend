@@ -107,8 +107,9 @@ export class UrlsService {
           filteredUrl[key] =
             key === 'shortened_url'
               ? 'https://relative-ray-national.ngrok-free.app/' + url[key]
-              : url[key];
-          key === 'deleted_at' ? this.formatToKoreanTime(url[key]) : url[key];
+              : key === 'created_at' || key === 'deleted_at'
+                ? this.formatToKoreanTime(url[key])
+                : url[key];
         }
       });
       return filteredUrl;
